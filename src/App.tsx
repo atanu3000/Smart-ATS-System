@@ -42,9 +42,13 @@ function App():JSX.Element {
   const getResponse = async () => {
     setResponse('');
     setIsLoading(true);
-    if (files) {
-      pdf2text(files);
-    }
+
+    if (!files || !jobDescription){
+      setIsLoading(false);
+      return setResponse('Fill the necessary data and try again.');
+    } 
+    if (files) pdf2text(files);
+    
     try {
       const model = genAI.getGenerativeModel({model: 'gemini-pro'})
       const result = await model.generateContent(prompt);
